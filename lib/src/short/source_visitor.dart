@@ -546,6 +546,7 @@ final class SourceVisitor extends ThrowingAstVisitor {
       if (node.exceptionType != null) {
         space();
       }
+      newline(); // STT 10/19/2024, move 'catch' to new line instead of '} catch'
       token(node.catchKeyword);
       space();
       token(node.leftParenthesis);
@@ -1003,6 +1004,7 @@ final class SourceVisitor extends ThrowingAstVisitor {
 
     builder.unnest();
 
+    newline(); // STT 10/19/2024, move '{' to start on a new line
     _beginBody(node.leftBracket, space: true);
 
     visitCommaSeparatedNodes(node.constants, between: splitOrTwoNewlines);
@@ -1663,7 +1665,7 @@ final class SourceVisitor extends ThrowingAstVisitor {
     }
 
     void visitChild(CollectionElement element, CollectionElement child) {
-      builder.nestExpression(indent: 2, now: true);
+      builder.nestExpression(indent: 4, now: true); // STT 10/19/2024, was 2
 
       // Treat a spread of a collection literal like a block in an if statement
       // and don't split after the "else".
@@ -1702,6 +1704,7 @@ final class SourceVisitor extends ThrowingAstVisitor {
       // but don't write it. It will either be the next element in [ifElements]
       // or the final else element handled after the loop.
       if (element.elseElement != null) {
+        newline(); // STT 10/19/2024, move 'else' to new line
         if (spreadBrackets.containsKey(element)) {
           space();
         } else {
@@ -1775,6 +1778,7 @@ final class SourceVisitor extends ThrowingAstVisitor {
         newline();
       }
 
+      newline(); // STT 10/19/2024, move 'else' to new line
       token(node.elseKeyword);
       visitClause(node.elseStatement!);
     }
@@ -2746,6 +2750,7 @@ final class SourceVisitor extends ThrowingAstVisitor {
   void visitSwitchStatement(SwitchStatement node) {
     _visitSwitchValue(node.switchKeyword, node.leftParenthesis, node.expression,
         node.rightParenthesis);
+    newline(); // STT 10/19/2024, move '{' to start on a new line
     _beginBody(node.leftBracket);
     for (var member in node.members) {
       _visitLabels(member.labels);
@@ -3863,6 +3868,7 @@ final class SourceVisitor extends ThrowingAstVisitor {
       return;
     }
 
+    newline(); // STT 10/19/2024, move '{' to start on a new line
     _beginBody(leftBracket);
     _visitBodyContents(nodes);
     _endBody(rightBracket, forceSplit: nodes.isNotEmpty);
